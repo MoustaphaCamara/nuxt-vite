@@ -2,27 +2,33 @@
   <div>
     <h1>Passer commande</h1>
     <h2>Produits disponibles :</h2>
-    <div
-      v-for="product in products"
-      :key="product.key"
-      class="card text-white bg-dark mb-3"
-      style="width: 18rem"
-    >
-      <div class="card-body">
-        <h5 class="card-title">{{ product.name }}</h5>
-        <h6 class="card-subtitle mb-2 text-muted">
-          Prix : {{ product.price }}€
-        </h6>
-        <p class="card-text">This is food.</p>
-        <a href="#" class="card-link">Buy some {{ product.name }}</a>
-      </div>
+    <div class="card-group">
+      <ProductItem
+        v-for="product in products"
+        v-bind:key="product.key"
+        v-bind:nom="product.name"
+        v-bind:prix="product.price"
+        v-on:commande="ajouterProduit"
+        role="commander"
+      />
+    </div>
+    <div class="card-group">
+      <ProductItem
+        v-for="product in commandes"
+        v-bind:key="product.key"
+        v-bind:nom="product.name"
+        v-bind:prix="product.price"
+        role="afficher"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import ProductItem from "../components/ProductItem.vue";
 export default {
   name: "commandes",
+  components: ProductItem,
   data() {
     return {
       products: [
@@ -31,7 +37,13 @@ export default {
         { key: 3, name: "Burger", price: 4.0 },
         { key: 4, name: "Frites", price: 2.5 },
       ],
+      commandes: [{ key: 4, name: "Frites", price: 2.5 }],
     };
+  },
+  methods: {
+    ajouterProduit(nom, prix) {
+      this.commandes.push({ name: nom, price: prix });
+    },
   },
 };
 </script>
